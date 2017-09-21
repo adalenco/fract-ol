@@ -28,16 +28,13 @@ typedef struct			s_ws
 	int					bpp;
 	int					s_l;
 	int					endian;
-	int					dec_x;
-	int					dec_y;
+	double				dec_x;
+	double				dec_y;
 	int					winx;
 	int					winy;
 	double				zoom;
-	int				it;
-	double				x1;
-	double				x2;
-	double				y1;
-	double				y2;
+	int					it;
+	char				fract;
 	cl_device_id        device_id;             // compute device id
     cl_context          context;                 // compute context
     cl_command_queue    commands;          // compute command queue
@@ -46,9 +43,13 @@ typedef struct			s_ws
     cl_mem              output;
 	size_t				global;
 	size_t				local;
+	size_t				dif;
 	unsigned int		count;
 	char				*KernelSource;
-
+	int					mousex;
+	int					mousey;
+	char				mouseact;
+	int					button;
 }						t_ws;
 
 int						ft_key_funct(int keycode, t_ws *prm);
@@ -57,5 +58,7 @@ void					ft_mandel(t_ws *prm);
 int	        			ft_opencl_init(t_ws *prm);
 void					ft_close_opencl(t_ws *prm);
 int						ft_calc_fractal(t_ws *prm);
+int						ft_mouse_hook(int x, int y, t_ws *prm);
+int						ft_mouse_clic_hook(int button, int x, int y, t_ws *prm);
 
 #endif

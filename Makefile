@@ -18,8 +18,8 @@ SRCPATH =	./src
 
 FC =		main.c \
 			key_funct.c \
-			ft_image.c \
 			get_next_line.c \
+			ft_image.c \
 			ft_opencld.c
 
 FCO =	$(FC:.c=.o)
