@@ -16,7 +16,7 @@
 int			ft_key_funct(int keycode, t_ws *prm)
 {
 	//ft_refresh_image(prm);
-	//printf("%d\n", keycode);
+	printf("keycode = %d\n", keycode);
 	ft_bzero(prm->img_ad, prm->count * 4);
 	if (keycode == 53 || keycode == 12)
 	{
@@ -24,12 +24,23 @@ int			ft_key_funct(int keycode, t_ws *prm)
 		(void)prm;
 		exit(0);
 	}
+	if (keycode == 7)
+	{
+		prm->zoom = 0.0000000000000035;
+		printf("c_r = %.20lf\n", (prm->dec_x - 960) / 200 * prm->zoom);
+	}
 	if (keycode == 2)
 		prm->it += 10;
 	if (keycode == 0)
 		prm->it -= 10;
+	if (keycode == 6)
+		prm->it -= 100;
+	if (keycode == 8)
+		prm->it += 100;
 	if (keycode == 35)
 	{
+		prm->mousey = prm->winy / 2;
+		prm->mousex = prm->winx / 2;
 		prm->zoom = 1;
 		prm->dec_x = 0;
 		prm->dec_y = 0;

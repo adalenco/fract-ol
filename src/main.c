@@ -24,8 +24,8 @@ void			ft_mlx_set(t_ws *prm, int x, int y)
 	prm->win = mlx_new_window(prm->mlx, prm->winx, prm->winy, "This is Fract'ol");
 	prm->img_ptr = mlx_new_image(prm->mlx, prm->winx, prm->winy);
 	prm->img_ad = mlx_get_data_addr(prm->img_ptr, &prm->bpp, &prm->s_l, &prm->endian);
-	prm->mousex = 0;
-	prm->mousey = 0;
+	prm->mousex = x / 2;
+	prm->mousey = y / 2;
 }
 
 void			ft_pixel_to_img(t_ws *prm, int x, int y, int color)
@@ -45,9 +45,11 @@ void ft_parse_fract(t_ws *prm, char **av)
 		prm->fract = 0;
 	else if (ft_strcmp(av[1], "julia") == 0)
 		prm->fract = 1;
+	else if (ft_strcmp(av[1], "bship") == 0)
+		prm->fract = 2;
 	else
 	{
-		printf("usage : ./fractol [mandelbrot] or [julia]");
+		printf("usage : ./fractol [mandelbrot] or [julia]\n");
 		exit(1);
 	}
 }

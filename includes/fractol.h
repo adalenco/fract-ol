@@ -50,6 +50,7 @@ typedef struct			s_ws
 	int					mousey;
 	char				mouseact;
 	int					button;
+	unsigned int		nb_op;
 }						t_ws;
 
 int						ft_key_funct(int keycode, t_ws *prm);

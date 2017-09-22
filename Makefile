@@ -20,6 +20,7 @@ FC =		main.c \
 			key_funct.c \
 			get_next_line.c \
 			ft_image.c \
+			opencl_init.c \
 			ft_opencld.c
 
 FCO =	$(FC:.c=.o)
