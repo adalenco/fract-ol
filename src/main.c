@@ -26,6 +26,10 @@ void			ft_mlx_set(t_ws *prm, int x, int y)
 	prm->img_ad = mlx_get_data_addr(prm->img_ptr, &prm->bpp, &prm->s_l, &prm->endian);
 	prm->mousex = x / 2;
 	prm->mousey = y / 2;
+	prm->palette = 1;
+	prm->zoom = 1;
+	prm->it = 100;
+	prm->mouseact = 0;
 }
 
 void			ft_pixel_to_img(t_ws *prm, int x, int y, int color)
@@ -47,6 +51,20 @@ void ft_parse_fract(t_ws *prm, char **av)
 		prm->fract = 1;
 	else if (ft_strcmp(av[1], "bship") == 0)
 		prm->fract = 2;
+	else if (ft_strcmp(av[1], "celtic") == 0)
+		prm->fract = 3;
+	else if (ft_strcmp(av[1], "tricorn") == 0)
+		prm->fract = 4;
+	else if (ft_strcmp(av[1], "spaceship") == 0)
+		prm->fract = 5;
+	else if (ft_strcmp(av[1], "mandeldrop") == 0)
+	{
+		prm->fract = 6;
+		prm->zoom = 1.25;
+		prm->dec_y = -180;
+	}
+	else if (ft_strcmp(av[1], "newton_classiq") == 0)
+		prm->fract = 7;
 	else
 	{
 		printf("usage : ./fractol [mandelbrot] or [julia]\n");
@@ -59,14 +77,14 @@ int				main(int ac, char **av)
 
 	t_ws		prm;
 
+	ft_mlx_set(&prm, 1920, 1080);
 	if (ac == 1)
-		prm.fract = 0;
+	{
+		printf("usage : ./fractol [mandelbrot] or [julia]\n");
+		exit(1);
+	}
 	else
 		ft_parse_fract(&prm, av);
-	ft_mlx_set(&prm, 1920, 1080);
-	prm.zoom = 1;
-	prm.it = 100;
-	prm.mouseact = 0;
 	//ft_mandel(&prm);
 	ft_opencl_init(&prm);
 	ft_calc_fractal(&prm);

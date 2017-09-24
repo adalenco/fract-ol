@@ -24,11 +24,6 @@ int			ft_key_funct(int keycode, t_ws *prm)
 		(void)prm;
 		exit(0);
 	}
-	if (keycode == 7)
-	{
-		prm->zoom = 0.0000000000000035;
-		printf("c_r = %.20lf\n", (prm->dec_x - 960) / 200 * prm->zoom);
-	}
 	if (keycode == 2)
 		prm->it += 10;
 	if (keycode == 0)
@@ -37,6 +32,36 @@ int			ft_key_funct(int keycode, t_ws *prm)
 		prm->it -= 100;
 	if (keycode == 8)
 		prm->it += 100;
+	if (keycode == 17)
+	{
+		prm->fract = 0;
+		keycode = 35;
+	}
+	if (keycode == 16)
+	{
+		prm->fract = 1;
+		keycode = 35;
+	}
+	if (keycode == 32)
+	{
+		prm->fract = 2;
+		keycode = 35;
+	}
+	if (keycode == 5)
+	{
+		prm->fract = 3;
+		keycode = 35;
+	}
+	if (keycode == 4)
+	{
+		prm->fract = 4;
+		keycode = 35;
+	}
+	if (keycode == 38)
+	{
+		prm->fract = 5;
+		keycode = 35;
+	}
 	if (keycode == 35)
 	{
 		prm->mousey = prm->winy / 2;
@@ -80,6 +105,14 @@ int			ft_key_funct(int keycode, t_ws *prm)
 		else
 			prm->mouseact = 0;
 	}
+	if (keycode == 46)
+	{
+		if (prm->palette == 2)
+			prm->palette = 1;
+		else
+			prm->palette = 2;
+	}
+
 	ft_calc_fractal(prm);
 	mlx_put_image_to_window(prm->mlx, prm->win, prm->img_ptr, 0, 0);
 	return (0);

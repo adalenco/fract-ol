@@ -18,6 +18,7 @@ void          ft_setarg(t_ws *prm)
     err |= clSetKernelArg(prm->kernel, 7, sizeof(int), &prm->it);
     err |= clSetKernelArg(prm->kernel, 8, sizeof(int), &prm->mousex);
     err |= clSetKernelArg(prm->kernel, 9, sizeof(int), &prm->mousey);
+    err |= clSetKernelArg(prm->kernel, 10, sizeof(char), &prm->palette);
     if (err != CL_SUCCESS)
     {
         printf("Error: Failed to set kernel arguments! %d\n", err);
