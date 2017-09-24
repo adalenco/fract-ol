@@ -21,9 +21,11 @@ void			ft_mlx_set(t_ws *prm, int x, int y)
 	prm->dec_y = 0;
 	prm->dec_x = 0;
 	prm->mlx = mlx_init();
-	prm->win = mlx_new_window(prm->mlx, prm->winx, prm->winy, "This is Fract'ol");
+	prm->win = mlx_new_window(prm->mlx, prm->winx, prm->winy, \
+		"This is Fract'ol");
 	prm->img_ptr = mlx_new_image(prm->mlx, prm->winx, prm->winy);
-	prm->img_ad = mlx_get_data_addr(prm->img_ptr, &prm->bpp, &prm->s_l, &prm->endian);
+	prm->img_ad = mlx_get_data_addr(prm->img_ptr, &prm->bpp, \
+		&prm->s_l, &prm->endian);
 	prm->mousex = x / 2;
 	prm->mousey = y / 2;
 	prm->palette = 1;
@@ -67,7 +69,7 @@ void ft_parse_fract(t_ws *prm, char **av)
 		prm->fract = 7;
 	else
 	{
-		printf("usage : ./fractol [mandelbrot] or [julia]\n");
+		printf("usage : ./fractol \"fractal name\"\n");
 		exit(1);
 	}
 }
@@ -78,15 +80,14 @@ int				main(int ac, char **av)
 	t_ws		prm;
 
 	ft_mlx_set(&prm, 1920, 1080);
-	if (ac == 1)
+	if (ac == 1 ||ac > 2)
 	{
-		printf("usage : ./fractol [mandelbrot] or [julia]\n");
-		exit(1);
+		printf("usage : ./fractol \"fractal name\"\n");
+		return (-1);
 	}
 	else
 		ft_parse_fract(&prm, av);
-	//ft_mandel(&prm);
-	ft_opencl_init(&prm);
+	opencl_init(&prm);
 	ft_calc_fractal(&prm);
 	mlx_put_image_to_window(prm.mlx, prm.win, prm.img_ptr, 0, 0);
 	mlx_hook(prm.win, KeyPress, KeyPressMask, ft_key_funct, &prm);

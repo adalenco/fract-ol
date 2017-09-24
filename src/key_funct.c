@@ -13,14 +13,35 @@
 #include "fractol.h"
 #include <stdio.h>
 
+void		t_keyfunct(int keycode, t_ws *prm)
+{
+	if (keycode == 83)
+		prm->dec_x -= 50;
+	if (keycode == 85)
+		prm->dec_x += 50;
+	if (keycode == 84)
+		prm->dec_y += 50;
+	if (keycode == 87)
+		prm->dec_y -= 50;
+	if (keycode == 123)
+		prm->dec_x -= 10;
+	if (keycode == 124)
+		prm->dec_x += 10;
+	if (keycode == 125)
+		prm->dec_y += 10;
+	if (keycode == 126)
+		prm->dec_y -= 10;
+}
+
 int			ft_key_funct(int keycode, t_ws *prm)
 {
-	//ft_refresh_image(prm);
-	printf("keycode = %d\n", keycode);
+	//printf("keycode = %d\n", keycode);
 	ft_bzero(prm->img_ad, prm->count * 4);
+	if (keycode >= 83 && keycode <= 126)
+		t_keyfunct(keycode, prm);
 	if (keycode == 53 || keycode == 12)
 	{
-		ft_close_opencl(prm);
+		opencl_close(prm);
 		(void)prm;
 		exit(0);
 	}
@@ -82,23 +103,8 @@ int			ft_key_funct(int keycode, t_ws *prm)
 		prm->dec_x /= 1.05;
 		prm->dec_y /= 1.05;
 	}
-	if (keycode == 83)
-		prm->dec_x -= 50;
-	if (keycode == 85)
-		prm->dec_x += 50;
-	if (keycode == 84)
-		prm->dec_y += 50;
-	if (keycode == 87)
-		prm->dec_y -= 50;
-	if (keycode == 123) // gauche
-		prm->dec_x -= 10;
-	if (keycode == 124) // droite
-		prm->dec_x += 10;
-	if (keycode == 125) // haut
-		prm->dec_y += 10;
-	if (keycode == 126) // bas
-		prm->dec_y -= 10;
-	if (keycode == 49) // space
+	
+	if (keycode == 49)
 	{
 		if (prm->mouseact == 0)
 			prm->mouseact = 1;
@@ -113,7 +119,7 @@ int			ft_key_funct(int keycode, t_ws *prm)
 			prm->palette = 2;
 	}
 
-	ft_calc_fractal(prm);
+	draw_fractal(prm);
 	mlx_put_image_to_window(prm->mlx, prm->win, prm->img_ptr, 0, 0);
 	return (0);
 }
@@ -125,7 +131,7 @@ int			ft_mouse_hook(int x, int y, t_ws *prm)
 		ft_bzero(prm->img_ad, prm->count * 4);
 		prm->mousex = x;
 		prm->mousey = y;
-		ft_calc_fractal(prm);
+		draw_fractal(prm);
 		mlx_put_image_to_window(prm->mlx, prm->win, prm->img_ptr, 0, 0);
 	}
 	return (0);
@@ -136,23 +142,21 @@ int			ft_mouse_clic_hook(int button, int x, int y, t_ws *prm)
 	double ozoom;
 
 	ft_bzero(prm->img_ad, prm->count * 4);
-	if (button == 4) // scroll up
+	if (button == 4)
 	{
 		ozoom = prm->zoom;
 		prm->zoom /= 1.15;
 		prm->dec_x = (x + prm->dec_x - 960) * ozoom / prm->zoom + 960 - x;
 		prm->dec_y = (y + prm->dec_y - 540) * ozoom / prm->zoom + 540 - y;
 	}
-	if (button == 5) // scroll down
+	if (button == 5)
 	{
 		ozoom = prm->zoom;
 		prm->zoom *= 1.15;
 		prm->dec_x = (x + prm->dec_x - 960) * ozoom / prm->zoom + 960 - x;
 		prm->dec_y = (y + prm->dec_y - 540) * ozoom / prm->zoom + 540 - y;
 	}
-	//prm->mousex = x;
-	//prm->mousey = y;
-	ft_calc_fractal(prm);
+	draw_fractal(prm);
 	mlx_put_image_to_window(prm->mlx, prm->win, prm->img_ptr, 0, 0);
 	return (0);
 }

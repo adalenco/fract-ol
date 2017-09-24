@@ -45,60 +45,71 @@ void        ft_loadkernel(t_ws *prm)
     ft_cpykernel(prm, fd);
 }
 
-int         ft_opencl_init(t_ws *prm)
+void        opencl_builderrors(t_ws *prm, int err)
+{
+    size_t len;
+
+    if (err == 1)
+        printf("Error: Failed to create a device group!\n");
+    else if (err == 2)
+        printf("Error: Failed to create a compute context!\n");
+    else if (err == 3)
+        printf("Error: Failed to create a command commands!\n");
+    else if (err == 4)
+        printf("Error: Failed to create compute program!\n");
+    else if (err == 5)
+    {
+        char buffer[50000];
+        printf("Error: Failed to build program executable!\n");
+        clGetProgramBuildInfo(prm->program, prm->device_id, \
+                CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+        printf("%s\n", buffer);
+    }
+    else if (err == 6)
+        printf("Error: Failed to create compute kernel!\n");
+    else if (err = 7)
+        printf("Error: Failed to allocate device memory!\n");
+    if (err >= 5)
+        exit(1);
+    return EXIT_FAILURE;
+}
+
+int         opencl_build(t_ws *prm)
+{
+    int err;
+
+    if ((err = clBuildProgram(prm->program, 0, NULL, NULL, NULL, \
+                NULL)) != CL_SUCCESS)
+        return (opencl_builderrors(5));
+    if (!(prm->kernel = clCreateKernel(prm->program, "fractal", &err)) \
+                || err!= CL_SUCCESS)
+        return (opencl_builderrors(6));
+    prm->count = prm->winx * prm->winy;
+    if (!(prm->output = clCreateBuffer(prm->context, CL_MEM_WRITE_ONLY, \
+                prm->count * 4, NULL, NULL)))
+        return (opencl_builderrors(7));
+    return (0)
+}
+
+int         opencl_init(t_ws *prm)
 {
     int     gpu;
     int     err;
 
     gpu = 1;
     ft_loadkernel(prm);
-    err = clGetDeviceIDs(NULL, gpu ? CL_DEVICE_TYPE_GPU : CL_DEVICE_TYPE_CPU, 1, &prm->device_id, NULL);
-    if (err != CL_SUCCESS)
-    {
-        printf("Error: Failed to create a device group!\n");
-        return EXIT_FAILURE;
-    }
-    prm->context = clCreateContext(0, 1, &prm->device_id, NULL, NULL, &err);
-    if (!prm->context)
-    {
-        printf("Error: Failed to create a compute context!\n");
-        return EXIT_FAILURE;
-    }
-    prm->commands = clCreateCommandQueue(prm->context, prm->device_id, 0, &err);
-    if (!prm->commands)
-    {
-        printf("Error: Failed to create a command commands!\n");
-        return EXIT_FAILURE;
-    }
-    prm->program = clCreateProgramWithSource(prm->context, 1, (const char **) & prm->KernelSource, NULL, &err);
-    if (!prm->program)
-    {
-        printf("Error: Failed to create compute program!\n");
-        return EXIT_FAILURE;
-    }
-    err = clBuildProgram(prm->program, 0, NULL, NULL, NULL, NULL);
-    if (err != CL_SUCCESS)
-    {
-        size_t len;
-        char buffer[50000];
-
-        printf("Error: Failed to build program executable!\n");
-        clGetProgramBuildInfo(prm->program, prm->device_id, CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-        printf("%s\n", buffer);
-        exit(1);
-    }
-    prm->kernel = clCreateKernel(prm->program, "fractal", &err);
-    if (!prm->kernel || err != CL_SUCCESS)
-    {
-        printf("Error: Failed to create compute kernel!\n");
-        exit(1);
-    }
-    prm->count = prm->winx * prm->winy;
-    prm->output = clCreateBuffer(prm->context, CL_MEM_WRITE_ONLY, prm->count * 4, NULL, NULL);
-    if (!prm->output)
-    {
-        printf("Error: Failed to allocate device memory!\n");
-        exit(1);
-    }
+    if ((err = clGetDeviceIDs(NULL, gpu ? CL_DEVICE_TYPE_GPU : \
+                CL_DEVICE_TYPE_CPU, 1, &prm->device_id, NULL)) != CL_SUCCESS)
+        return (opencl_builderrors(1));
+    if (!(prm->context = clCreateContext(0, 1, &prm->device_id, \
+                NULL, NULL, &err)))
+        return (opencl_builderrors(2));
+    if (!(prm->commands = clCreateCommandQueue(prm->context, \
+                prm->device_id, 0, &err)))
+        return (opencl_builderrors(3));
+    if (!(prm->program = clCreateProgramWithSource(prm->context, 1, \
+                (const char **) & prm->KernelSource, NULL, &err)))
+       return (opencl_builderrors(4));
+    opencl_build(prm);
     return (0);
 }

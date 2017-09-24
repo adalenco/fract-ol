@@ -35,11 +35,11 @@ typedef struct			s_ws
 	double				zoom;
 	int					it;
 	char				fract;
-	cl_device_id        device_id;             // compute device id
-    cl_context          context;                 // compute context
-    cl_command_queue    commands;          // compute command queue
-    cl_program          program;                 // compute program
-    cl_kernel           kernel;                   // compute kernel
+	cl_device_id        device_id;
+    cl_context          context;
+    cl_command_queue    commands;
+    cl_program          program;
+    cl_kernel           kernel;
     cl_mem              output;
 	size_t				global;
 	size_t				local;
@@ -57,9 +57,9 @@ typedef struct			s_ws
 int						ft_key_funct(int keycode, t_ws *prm);
 void					ft_refresh_image(t_ws *param);
 void					ft_mandel(t_ws *prm);
-int	        			ft_opencl_init(t_ws *prm);
-void					ft_close_opencl(t_ws *prm);
-int						ft_calc_fractal(t_ws *prm);
+int	        			opencl_init(t_ws *prm);
+void					opencl_close(t_ws *prm);
+int						draw_fractal(t_ws *prm);
 int						ft_mouse_hook(int x, int y, t_ws *prm);
 int						ft_mouse_clic_hook(int button, int x, int y, t_ws *prm);
 

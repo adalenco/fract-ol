@@ -6,7 +6,6 @@ void          ft_setarg(t_ws *prm)
 {
     int       err;
 
-    printf("%.20lf\nit = %d\n\n", prm->zoom, prm->it);
     err = 0;
     err = clSetKernelArg(prm->kernel, 0, sizeof(cl_mem), &prm->output);
     err |= clSetKernelArg(prm->kernel, 1, sizeof(int), &prm->winx);
@@ -26,28 +25,13 @@ void          ft_setarg(t_ws *prm)
     }
 }
 
-int         ft_calc_fractal(t_ws *prm)
+int         get_imgptr(t_ws *prm)
 {
     int     err;
 
-    ft_setarg(prm);
-    printf("%i\n", CL_KERNEL_WORK_GROUP_SIZE);
-    err = clGetKernelWorkGroupInfo(prm->kernel, prm->device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(prm->local), &prm->local, NULL);
-    if (err != CL_SUCCESS)
-    {
-        printf("Error: Failed to retrieve kernel work group info! %d\n", err);
-        exit(1);
-    }
-    printf("%zu\n", prm->local);
-    prm->global = (size_t)prm->count;
-    err = clEnqueueNDRangeKernel(prm->commands, prm->kernel, 1, NULL, &prm->global, &prm->local, 0, NULL, NULL);
-    if (err)
-    {
-        printf("Error: Failed to execute kernel!\n");
-        return EXIT_FAILURE;
-    }
     clFinish(prm->commands);
-    err = clEnqueueReadBuffer(prm->commands, prm->output, CL_TRUE, 0, sizeof(char) * (prm->count * 4), prm->img_ad, 0, NULL, NULL );
+    err = clEnqueueReadBuffer(prm->commands, prm->output, CL_TRUE, 0, \
+        sizeof(char) * (prm->count * 4), prm->img_ad, 0, NULL, NULL );
     if (err != CL_SUCCESS)
     {
         printf("Error: Failed to read output array! %d\n", err);
@@ -56,7 +40,32 @@ int         ft_calc_fractal(t_ws *prm)
     return (0);
 }
 
-void        ft_close_opencl(t_ws *prm)
+int         draw_fractal(t_ws *prm)
+{
+    int     err;
+
+    ft_setarg(prm);
+    printf("%i\n", CL_KERNEL_WORK_GROUP_SIZE);
+    err = clGetKernelWorkGroupInfo(prm->kernel, prm->device_id, \
+        CL_KERNEL_WORK_GROUP_SIZE, sizeof(prm->local), &prm->local, NULL);
+    if (err != CL_SUCCESS)
+    {
+        printf("Error: Failed to retrieve kernel work group info! %d\n", err);
+        exit(1);
+    }
+    prm->global = (size_t)prm->count;
+    err = clEnqueueNDRangeKernel(prm->commands, prm->kernel, 1, NULL, \
+        &prm->global, &prm->local, 0, NULL, NULL);
+    if (err)
+    {
+        printf("Error: Failed to execute kernel!\n");
+        return EXIT_FAILURE;
+    }
+    get_imgptr(prm);
+    return (0);
+}
+
+void        opencl_close(t_ws *prm)
 {
     clReleaseMemObject(prm->output);
     clReleaseProgram(prm->program);
