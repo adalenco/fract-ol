@@ -23,7 +23,7 @@ int			ft_key_funct(int key, t_ws *prm)
 		reset_quit_keyfunct(key, prm);
 	if (key == 49 || key == 46 | key == 11)
 		options_key(key, prm);
-	if (key == 45 || key == 17)
+	if (key == 45 || key == 17 || key == 78 || key == 69 || key == 67)
 		swap_keyfunct(key, prm);
 	draw_fractal(prm);
 	mlx_put_image_to_window(prm->mlx, prm->win, prm->img_ptr, 0, 0);

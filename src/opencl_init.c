@@ -12,7 +12,6 @@
 
 #include "fractol.h"
 #include "get_next_line.h"
-#include <stdio.h>
 
 void		ft_cpykernel(t_ws *prm, int fd)
 {
@@ -31,7 +30,7 @@ void		ft_cpykernel(t_ws *prm, int fd)
 	}
 	if (ret == -1)
 	{
-		printf("getnextline error\n");
+		ft_putstr("getnextline error\n");
 		exit(1);
 	}
 	tmp = prm->KernelSource;
@@ -46,12 +45,12 @@ void		ft_loadkernel(t_ws *prm)
 
 	if ((prm->KernelSource = ft_strdup("#define FROM_KERNEL\n")) == NULL)
 	{
-		printf("malloc error while loading kernel\n");
+		ft_putstr("malloc error while loading kernel\n");
 		exit(1);
 	}
 	if ((fd = open("./src/fractol.cl", O_RDONLY)) == -1)
 	{
-		printf("error while openning kernel\n");
+		ft_putstr("error while openning kernel\n");
 		exit(1);
 	}
 	ft_cpykernel(prm, fd);
@@ -63,24 +62,24 @@ int			opencl_builderrors(t_ws *prm, int err)
 	char	buffer[50000];
 
 	if (err == 1)
-		printf("Error: Failed to create a device group!\n");
+		ft_putstr("Error: Failed to create a device group!\n");
 	else if (err == 2)
-		printf("Error: Failed to create a compute context!\n");
+		ft_putstr("Error: Failed to create a compute context!\n");
 	else if (err == 3)
-		printf("Error: Failed to create a command commands!\n");
+		ft_putstr("Error: Failed to create a command commands!\n");
 	else if (err == 4)
-		printf("Error: Failed to create compute program!\n");
+		ft_putstr("Error: Failed to create compute program!\n");
 	else if (err == 5)
 	{
-		printf("Error: Failed to build program executable!\n");
+		ft_putstr("Error: Failed to build program executable!\n");
 		clGetProgramBuildInfo(prm->program, prm->device_id, \
 				CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-		printf("%s\n", buffer);
+		ft_putendl(buffer);
 	}
 	else if (err == 6)
-		printf("Error: Failed to create compute kernel!\n");
+		ft_putstr("Error: Failed to create compute kernel!\n");
 	else if (err == 7)
-		printf("Error: Failed to allocate device memory!\n");
+		ft_putstr("Error: Failed to allocate device memory!\n");
 	if (err >= 5)
 		exit(1);
 	return (EXIT_FAILURE);

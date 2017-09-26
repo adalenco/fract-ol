@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "fractol.h"
-#include "get_next_line.h"
-#include <stdio.h>
 
 void		ft_setarg(t_ws *prm)
 {
@@ -32,9 +30,12 @@ void		ft_setarg(t_ws *prm)
 	err |= clSetKernelArg(prm->kernel, 10, sizeof(char), &prm->palette);
 	err |= clSetKernelArg(prm->kernel, 11, sizeof(int), &prm->newton);
 	err |= clSetKernelArg(prm->kernel, 12, sizeof(char), &prm->ncolor);
+	err |= clSetKernelArg(prm->kernel, 13, sizeof(int), &prm->mult);
 	if (err != CL_SUCCESS)
 	{
-		printf("Error: Failed to set kernel arguments! %d\n", err);
+		ft_putstr("Error: Failed to set kernel arguments!");
+		ft_putnbr(err);
+		write(1, "\n", 1);
 		exit(1);
 	}
 }
@@ -48,7 +49,9 @@ int			get_imgptr(t_ws *prm)
 			sizeof(char) * (prm->count * 4), prm->img_ad, 0, NULL, NULL);
 	if (err != CL_SUCCESS)
 	{
-		printf("Error: Failed to read output array! %d\n", err);
+		ft_putstr("Error: Failed to read output array!");
+		ft_putnbr(err);
+		write(1, "\n", 1);
 		exit(1);
 	}
 	return (0);
@@ -59,12 +62,13 @@ int			draw_fractal(t_ws *prm)
 	int		err;
 
 	ft_setarg(prm);
-	printf("%i\n", CL_KERNEL_WORK_GROUP_SIZE);
 	err = clGetKernelWorkGroupInfo(prm->kernel, prm->device_id, \
 			CL_KERNEL_WORK_GROUP_SIZE, sizeof(prm->local), &prm->local, NULL);
 	if (err != CL_SUCCESS)
 	{
-		printf("Error: Failed to retrieve kernel work group info! %d\n", err);
+		ft_putstr("Error: Failed to retrieve kernel work group info!");
+		ft_putnbr(err);
+		write(1, "\n", 1);
 		exit(1);
 	}
 	prm->global = (size_t)prm->count;
@@ -72,7 +76,7 @@ int			draw_fractal(t_ws *prm)
 			&prm->global, &prm->local, 0, NULL, NULL);
 	if (err)
 	{
-		printf("Error: Failed to execute kernel!\n");
+		ft_putstr("Error: Failed to execute kernel!\n");
 		return (EXIT_FAILURE);
 	}
 	get_imgptr(prm);

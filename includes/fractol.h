@@ -18,6 +18,7 @@
 # include "libft.h"
 # include <stdlib.h>
 # include <OpenCL/opencl.h>
+# include <stdio.h>
 
 typedef struct			s_ws
 {
@@ -54,6 +55,7 @@ typedef struct			s_ws
 	char				palette;
 	int					newton;
 	char				ncolor;
+	int					mult;
 }						t_ws;
 
 int						ft_key_funct(int keycode, t_ws *prm);

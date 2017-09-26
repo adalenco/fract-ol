@@ -68,9 +68,18 @@ void		reset_quit_keyfunct(int key, t_ws *prm)
 	{
 		prm->mousey = prm->winy / 2;
 		prm->mousex = prm->winx / 2;
-		prm->zoom = 1;
-		prm->dec_x = 0;
-		prm->dec_y = 0;
+		if (prm->fract != 6)
+		{
+			prm->zoom = 1;
+			prm->dec_x = 0;
+			prm->dec_y = 0;
+		}
+		else
+		{
+			prm->fract = 6;
+			prm->zoom = 1.25;
+			prm->dec_y = -180;
+		}
 	}
 }
 
@@ -78,18 +87,27 @@ void		swap_keyfunct(int key, t_ws *prm)
 {
 	if (key == 17)
 	{
-		if (prm->fract == 7)
+		if (prm->fract == 13)
 			prm->fract = 0;
 		else
 			prm->fract++;
 	}
-	if (key == 45)
+	else if (key == 45)
 	{
 		if (prm->newton == 5)
 			prm->newton = 0;
 		else
 			prm->newton++;
 	}
+	else if (key == 78)
+	{
+		if (prm->mult != 1)
+			prm->mult--;
+	}
+	else if (key == 69)
+		prm->mult++;
+	else if (key == 67)
+		prm->mult = 1;
 	reset_quit_keyfunct(35, prm);
 }
 
