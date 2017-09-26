@@ -18,6 +18,21 @@ t_complex mult_complex(t_complex z1, t_complex z2)
     return (res);
 }
 
+t_complex	power_complex(t_complex z, int n)
+{
+	t_complex	res;
+	int			i;
+
+	i = 1;
+	res = z;
+	while (i < n)
+	{
+		res = mult_complex(res, z);
+		i++;
+	}
+	retun (res);
+}
+
 t_complex   mult_real(t_complex z, int i)
 {
     t_complex res;
@@ -69,16 +84,6 @@ t_complex     div_complex(t_complex z1, t_complex z2)
     return (res);
 }
 
-t_complex   p(t_complex z)
-{
-    t_complex res;
-
-    res = mult_complex(z, z);
-    res = mult_complex(res, z);
-    res.r -= 1;
-    return (res);
-}
-
 t_complex   div_real(t_complex z1, t_complex z2)
 {
     t_complex res;
@@ -88,20 +93,99 @@ t_complex   div_real(t_complex z1, t_complex z2)
     return (res);
 }
 
-t_complex   p_prime(t_complex z, t_complex h)
+t_complex   p_3(t_complex z)
 {
     t_complex res;
 
-    res = sub_complex(p(add_complex(z, h)), p(z));
+	res = mult_complex(z, z);
+	res = mult_complex(res, z);
+	res.r -= 1;
+	return (res);
+}
+
+t_complex   p_5(t_complex z)
+{
+    t_complex res;
+
+    res = mult_complex(z, z);
+    res = mult_complex(res, z);
+	res = mult_complex(res, z);
+	res = mult_complex(res, z);
+    res.r -= 1;
+    return (res);
+}
+
+t_complex	p_3_moins(t_complex z)
+{
+	t_complex	res;
+
+	res = p_3(z);
+	res = sub_complex(res, mult_real(z, 2));
+	res.r += 2;
+	return (res);
+}
+
+t_complex   p_hyp(t_complex z)
+{
+    t_complex res;
+
+    res.r = cos((double)z.r) * cos((double)z.i);
+	res.i = sinh((double)z.r) * sin((double)z.i);
+	res.r -= 1;
+
+	return (res);
+}
+
+t_complex	p_6_3(t_complex z)
+{
+	t_complex	res;
+
+	res = p_5(z);
+	res = mult_complex(res, z);
+	res = add_complex(res, p_3(z));
+	res.r -= 1;
+	return (res);
+}
+
+t_complex	p_sin(t_complex z)
+{
+	t_complex res;
+
+	res.r = sin((double)z.r) * cosh((double)z.i);
+	res.i = cos((double)z.r) * sinh((double)z.i);
+	res.r -= 1;
+	return (res);
+}
+
+t_complex	p(t_complex z, int n)
+{
+	if (n == 0)
+		return (p_3(z));
+	else if (n == 1)
+		return (p_5(z));
+	else if (n == 2)
+		return (p_6_3(z));
+	else if (n == 3)
+		return (p_3_moins(z));
+	else if (n == 4)
+		return (p_sin(z));
+	return (p_hyp(z));
+}
+
+t_complex   p_prime(t_complex z, t_complex h, int n)
+{
+    t_complex res;
+
+    res = sub_complex(p(add_complex(z, h), n), p(z, n));
     res = div_real(res, h);
     return (res);
 }
 
-t_complex   zn_plus(t_complex z, t_complex h)
+t_complex   zn_plus(t_complex z, t_complex h, int n)
 {
     t_complex res;
 
-    res = sub_complex(z, div_complex(p(z),p_prime(z, h)));
+    res = sub_complex(z, div_complex(p(z, n), p_prime(z, h, n)));
     return (res);
 }
 
@@ -191,7 +275,9 @@ __kernel void fractal(
                         int  it,
                         int mousex,
                         int mousey,
-                        char pal)
+                        char pal,
+						int newton,
+						char ncolor)
 {
     int             id;
     int             x;
@@ -456,13 +542,11 @@ __kernel void fractal(
             z.i = ((img_y / 200) * zoom);
             i = 0;
             eps = 0.1;
-            //printf("z.r = %f\nz.i = %f\n\n", z2.r, z2.i);
             while (eps > 0.001 && i < it)
             {
                 i++;
-                z2 = zn_plus(z, h);
+                z2 = zn_plus(z, h, newton);
                 eps = modsquare_complex(sub_complex(z2, z));
-            //    printf("%f\n", eps);
                 z = z2;
             }
             if (i == it)
@@ -472,7 +556,44 @@ __kernel void fractal(
             }
             else
             {
-                log_zn = log((float)(z.r * z.r) + (float)(z.i * z.i)) / 2.0;
+				if (ncolor == 1)
+				{
+					log_zn = log((double)(z.r * z.r) + (double)(z.i * z.i)) / 2.0;
+					nu = log(log_zn / log(2.0)) / log(2.0);
+					it_color = i + 1 - nu;
+					if (it_color < 0)
+					it_color = 0;
+					color1 = palette[(int)floor(it_color) % 16];
+					color2 = palette[((int)floor(it_color) + 1) % 16];
+				}
+				else
+				{
+					color1 = palette[(int)i % 16];
+					color2 = palette[((int)i + 1) % 16];
+				}
+                ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
+            }
+        }
+		/*else if (fract == 8)
+		{
+			z2.r = (img_x / 200) * zoom;
+            z2.i = (img_y / 200) * zoom;
+            z.r = ((long double)mousex - MIDX) / WINX * 3;
+            z.i = ((long double)mousey - MIDY) / WINY * 3;
+            i = 0;
+            while (power_complex(z, newton) < 400 && i < it)
+            {
+                z = add_complex(power_complex(z, newton), z2);
+                i++;
+            }
+            if (i == it)
+            {
+                color = 0x00000000;
+                ((__global unsigned int *)output)[id] = color;
+            }
+            else
+            {
+                log_zn = log((float)(z_r * z_r) + (float)(z_i * z_i)) / 2;
                 nu = log(log_zn / log(2.0)) / log(2.0);
                 it_color = i + 1 - nu;
                 if (it_color < 0)
@@ -480,6 +601,7 @@ __kernel void fractal(
                 color1 = palette[(int)floor(it_color) % 16];
                 color2 = palette[((int)floor(it_color) + 1) % 16];
                 ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
-            }
-        }
+            }*/
+
+		}
 }

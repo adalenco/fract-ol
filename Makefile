@@ -6,7 +6,7 @@
 #    By: adalenco <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/10 17:12:17 by adalenco          #+#    #+#              #
-#    Updated: 2017/09/15 16:16:39 by adalenco         ###   ########.fr        #
+#    Updated: 2017/09/26 13:01:17 by adalenco         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ FC =		main.c \
 			get_next_line.c \
 			ft_image.c \
 			opencl_init.c \
-			ft_opencld.c
+			key_opt.c \
+			opencl_calc.c
 
 FCO =	$(FC:.c=.o)
 

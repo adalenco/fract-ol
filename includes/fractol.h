@@ -6,7 +6,7 @@
 /*   By: adalenco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 20:52:31 by adalenco          #+#    #+#             */
-/*   Updated: 2017/09/15 16:57:04 by adalenco         ###   ########.fr       */
+/*   Updated: 2017/09/26 13:01:03 by adalenco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct			s_ws
 	int					button;
 	unsigned int		nb_op;
 	char				palette;
+	int					newton;
+	char				ncolor;
 }						t_ws;
 
 int						ft_key_funct(int keycode, t_ws *prm);
@@ -62,5 +64,10 @@ void					opencl_close(t_ws *prm);
 int						draw_fractal(t_ws *prm);
 int						ft_mouse_hook(int x, int y, t_ws *prm);
 int						ft_mouse_clic_hook(int button, int x, int y, t_ws *prm);
+void					t_keyfunct(int key, t_ws *prm);
+void					zoom_it_keyfunct(int key, t_ws *prm);
+void					reset_quit_keyfunct(int key, t_ws *prm);
+void					swap_keyfunct(int key, t_ws *prm);
+void					options_key(int key, t_ws *prm);
 
 #endif
