@@ -20,6 +20,21 @@
 # include <OpenCL/opencl.h>
 # include <stdio.h>
 
+typedef struct			s_cl
+{
+	cl_device_id        device_id;
+    cl_context          context;
+    cl_command_queue    commands;
+    cl_program          program;
+    cl_kernel           kernel;
+    cl_mem              output;
+	size_t				global;
+	size_t				local;
+	size_t				dif;
+	int					gpu;
+	char				*KernelSource;
+}						t_cl;
+
 typedef struct			s_ws
 {
 	void				*mlx;
@@ -36,17 +51,8 @@ typedef struct			s_ws
 	double				zoom;
 	int					it;
 	char				fract;
-	cl_device_id        device_id;
-    cl_context          context;
-    cl_command_queue    commands;
-    cl_program          program;
-    cl_kernel           kernel;
-    cl_mem              output;
-	size_t				global;
-	size_t				local;
-	size_t				dif;
+	t_cl				cl;
 	unsigned int		count;
-	char				*KernelSource;
 	int					mousex;
 	int					mousey;
 	char				mouseact;

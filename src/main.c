@@ -35,6 +35,7 @@ void			ft_mlx_set(t_ws *prm, int x, int y)
 	prm->newton = 0;
 	prm->ncolor = 0;
 	prm->mult = 1;
+	prm->cl.gpu = 1;
 }
 
 void			commands(void)
@@ -116,7 +117,11 @@ int				main(int ac, char **av)
 	}
 	else
 		ft_parse_fract(&prm, av);
-	opencl_init(&prm);
+	if (opencl_init(&prm) == EXIT_FAILURE)
+	{
+		prm.cl.gpu = 0;
+		opencl_init(&prm);
+	}
 	draw_fractal(&prm);
 	mlx_put_image_to_window(prm.mlx, prm.win, prm.img_ptr, 0, 0);
 	mlx_hook(prm.win, KeyPress, KeyPressMask, ft_key_funct, &prm);
