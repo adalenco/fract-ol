@@ -6,7 +6,7 @@
 /*   By: adalenco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 19:12:51 by adalenco          #+#    #+#             */
-/*   Updated: 2017/09/26 13:09:37 by adalenco         ###   ########.fr       */
+/*   Updated: 2017/09/27 17:09:07 by adalenco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,17 @@ int			ft_key_funct(int key, t_ws *prm)
 	ft_bzero(prm->img_ad, prm->count * 4);
 	if (key >= 83 && key <= 126)
 		t_keyfunct(key, prm);
-	if (key == 0 || key == 1 || key == 2 || key == 6 || key == 8 || key == 13)
+	else if (key == 0 || key == 1 || key == 2 ||
+			key == 6 || key == 8 || key == 13)
 		zoom_it_keyfunct(key, prm);
-	if (key == 35 || key == 12 || key == 53)
+	else if (key == 35 || key == 12 || key == 53)
 		reset_quit_keyfunct(key, prm);
-	if (key == 49 || key == 46 | key == 11)
+	else if (key == 49 || key == 46 || key == 11)
 		options_key(key, prm);
-	if (key == 45 || key == 17)
+	else if (key == 17 || key == 15)
 		swap_keyfunct(key, prm);
+	else
+		mult_keyfunct(key, prm);
 	draw_fractal(prm);
 	mlx_put_image_to_window(prm->mlx, prm->win, prm->img_ptr, 0, 0);
 	return (0);

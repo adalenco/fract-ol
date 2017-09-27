@@ -6,7 +6,7 @@
 #    By: adalenco <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/10 17:12:17 by adalenco          #+#    #+#              #
-#    Updated: 2017/09/26 13:01:17 by adalenco         ###   ########.fr        #
+#    Updated: 2017/09/27 17:07:51 by adalenco         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,9 @@ SRCPATH =	./src
 
 FC =		main.c \
 			key_funct.c \
-			get_next_line.c \
-			ft_image.c \
 			opencl_init.c \
 			key_opt.c \
+			key_specials.c \
 			opencl_calc.c
 
 FCO =	$(FC:.c=.o)

@@ -6,7 +6,7 @@
 #    By: adalenco <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/27 21:24:43 by adalenco          #+#    #+#              #
-#    Updated: 2016/11/27 21:24:44 by adalenco         ###   ########.fr        #
+#    Updated: 2017/09/27 17:06:23 by adalenco         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,7 @@ FCHC =	ft_atoi.c \
 		ft_lstiter.c \
 		ft_lstmap.c \
 		ft_lstnew.c \
+		get_next_line.c \
 		ft_realloc.c
 
 FCHO =	$(FCHC:.c=.o)

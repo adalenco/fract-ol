@@ -66,54 +66,20 @@ void		reset_quit_keyfunct(int key, t_ws *prm)
 	}
 	if (key == 35)
 	{
+		prm->it = 100;
 		prm->mousey = prm->winy / 2;
 		prm->mousex = prm->winx / 2;
-		prm->zoom = 1;
-		prm->dec_x = 0;
-		prm->dec_y = 0;
-	}
-}
-
-void		swap_keyfunct(int key, t_ws *prm)
-{
-	if (key == 17)
-	{
-		if (prm->fract == 7)
-			prm->fract = 0;
+		if (prm->fract == 6 || (prm->fract == 9 && prm->mult == 2))
+		{
+			prm->zoom = 1.25;
+			prm->dec_x = 0;
+			prm->dec_y = -180;
+		}
 		else
-			prm->fract++;
-	}
-	if (key == 45)
-	{
-		if (prm->newton == 5)
-			prm->newton = 0;
-		else
-			prm->newton++;
-	}
-	reset_quit_keyfunct(35, prm);
-}
-
-void		options_key(int key, t_ws *prm)
-{
-	if (key == 49)
-	{
-		if (prm->mouseact == 0)
-			prm->mouseact = 1;
-		else
-			prm->mouseact = 0;
-	}
-	if (key == 46)
-	{
-		if (prm->palette == 2)
-			prm->palette = 1;
-		else
-			prm->palette = 2;
-	}
-	if (key == 11)
-	{
-		if (prm->ncolor == 0)
-			prm->ncolor++;
-		else
-			prm->ncolor--;
+		{
+			prm->zoom = 1;
+			prm->dec_x = 0;
+			prm->dec_y = 0;
+		}
 	}
 }

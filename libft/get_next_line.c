@@ -6,11 +6,11 @@
 /*   By: adalenco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/06 16:15:38 by adalenco          #+#    #+#             */
-/*   Updated: 2017/03/14 20:28:51 by adalenco         ###   ########.fr       */
+/*   Updated: 2017/09/27 17:07:03 by adalenco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
 static t_gnllist		*list_new(int fd)
 {

@@ -30,7 +30,7 @@ t_complex	power_complex(t_complex z, int n)
 		res = mult_complex(res, z);
 		i++;
 	}
-	retun (res);
+	return (res);
 }
 
 t_complex   mult_real(t_complex z, int i)
@@ -277,7 +277,8 @@ __kernel void fractal(
                         int mousey,
                         char pal,
 						int newton,
-						char ncolor)
+						char ncolor,
+                        int mult)
 {
     int             id;
     int             x;
@@ -292,8 +293,8 @@ __kernel void fractal(
     long double     tmp;
     int             color;
     long double     nu;
-    float            log_zn;
-    float            it_color;
+    float           log_zn;
+    float           it_color;
     int             color1;
     int             color2;
     int             palette[16];
@@ -574,16 +575,16 @@ __kernel void fractal(
                 ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
             }
         }
-		/*else if (fract == 8)
+		else if (fract == 8)
 		{
 			z2.r = (img_x / 200) * zoom;
             z2.i = (img_y / 200) * zoom;
             z.r = ((long double)mousex - MIDX) / WINX * 3;
             z.i = ((long double)mousey - MIDY) / WINY * 3;
             i = 0;
-            while (power_complex(z, newton) < 400 && i < it)
+            while (modsquare_complex(z) < 400 && i < it)
             {
-                z = add_complex(power_complex(z, newton), z2);
+                z = add_complex(power_complex(z, mult), z2);
                 i++;
             }
             if (i == it)
@@ -593,7 +594,7 @@ __kernel void fractal(
             }
             else
             {
-                log_zn = log((float)(z_r * z_r) + (float)(z_i * z_i)) / 2;
+                log_zn = log((float)(z.r * z.r) + (float)(z.i * z.i)) / 2;
                 nu = log(log_zn / log(2.0)) / log(2.0);
                 it_color = i + 1 - nu;
                 if (it_color < 0)
@@ -601,7 +602,157 @@ __kernel void fractal(
                 color1 = palette[(int)floor(it_color) % 16];
                 color2 = palette[((int)floor(it_color) + 1) % 16];
                 ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
-            }*/
+            }
 
 		}
+        else if (fract == 9)
+        {
+            t_complex z3;
+            z2.r = ((-img_y / 200) * zoom);
+            z2.i = ((img_x / 200) * zoom);
+            z3.r = modsquare_complex(z2);
+            z2 = div_real(z2, z3);
+            z.r = z2.r;
+            z.i = z2.i;
+            i = 0;
+            while (modsquare_complex(z) < 400 && i < it)
+            {
+                z = add_complex(power_complex(z, mult), z2);
+                i++;
+            }
+            if (i == it)
+            {
+                color = 0x00000000;
+                ((__global unsigned int *)output)[id] = color;
+            }
+            else
+            {
+                log_zn = log((float)(z.r * z.r) + (float)(z.i * z.i)) / 2.0;
+                nu = log(log_zn / log(2.0)) / log(2.0);
+                it_color = i + 1 - nu;
+                if (it_color < 0)
+                    it_color = 0;
+                color1 = palette[(int)floor(it_color) % 16];
+                color2 = palette[((int)floor(it_color) + 1) % 16];
+                ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
+            }
+        }
+        else if (fract == 10)
+        {
+            z2.r = (img_x / 200) * zoom;
+            z2.i = (img_y / 200) * zoom;
+            z.r = 0;
+            z.i = 0;
+            i = 0;
+            while (modsquare_complex(z) < 400 && i < it)
+            {
+                z = add_complex(power_complex(z, mult), z2);
+                z.r = kabs(z.r);
+                z.i = kabs(z.i);
+                i++;
+            }
+            if (i == it)
+            {
+                color = 0x00000000;
+                ((__global unsigned int *)output)[id] = color;
+            }
+            else
+            {
+                log_zn = log((float)(z.r * z.r) + (float)(z.i * z.i)) / 2.0;
+                nu = log(log_zn / log(2.0)) / log(2.0);
+                it_color = i + 1 - nu;
+                if (it_color < 0)
+                    it_color = 0;
+                color1 = palette[(int)floor(it_color) % 16];
+                color2 = palette[((int)floor(it_color) + 1) % 16];
+                ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
+            }
+        }
+        else if (fract == 11)
+        {
+            z.r = (img_x / 200) * zoom;
+            z.i = (img_y / 200) * zoom;
+            z2.r = ((double)mousex - MIDX) / winx * 3;
+            z2.i = ((double)mousey - MIDY) / winy * 3;
+            i = 0;
+            while (modsquare_complex(z) < 400 && i < it)
+            {
+                z = add_complex(power_complex(z, mult), z2);
+                i++;
+            }
+            if (i == it)
+            {
+                color = 0x00000000;
+                ((__global unsigned int *)output)[id] = color;
+            }
+            else
+            {
+                log_zn = log((float)(z.r * z.r) + (float)(z.i * z.i)) / 2.0;
+                nu = log(log_zn / log(2.0)) / log(2.0);
+                it_color = i + 1 - nu;
+                if (it_color < 0)
+                    it_color = 0;
+                color1 = palette[(int)floor(it_color) % 16];
+                color2 = palette[((int)floor(it_color) + 1) % 16];
+                ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
+            }
+        }
+        else if (fract == 12)
+        {
+            z2.r = (img_x / 200) * zoom;
+            z2.i = (img_y / 200) * zoom;
+            z.r = 0;
+            z.i = 0;
+            i = 0;
+            while (modsquare_complex(z) < 400 && i < it)
+            {
+                z = power_complex(z, mult);
+                z.r = kabs(z.r);
+                z = add_complex(z, z2);
+                i++;
+            }
+            if (i == it)
+            {
+                color = 0x00000000;
+                ((__global unsigned int *)output)[id] = color;
+            }
+            else
+            {
+                log_zn = log((float)(z.r * z.r) + (float)(z.i * z.i)) / 2.0;
+                nu = log(log_zn / log(2.0)) / log(2.0);
+                it_color = i + 1 - nu;
+                color1 = palette[(int)floor(it_color) % 16];
+                color2 = palette[((int)floor(it_color) + 1) % 16];
+                ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
+            }
+        }
+        else if (fract == 13)
+        {
+            z2.r = (img_x / 200) * zoom;
+            z2.i = (img_y / 200) * zoom;
+            z.r = 0;
+            z.i = 0;
+            i = 0;
+            while (modsquare_complex(z) < 400 && i < it)
+            {
+                z = power_complex(z, mult);
+                z.r = z.r - z2.r;
+                z.i = -z.i + z2.i;
+                i++;
+            }
+            if (i == it)
+            {
+                color = 0x00000000;
+                ((__global unsigned int *)output)[id] = color;
+            }
+            else
+            {
+                log_zn = log((float)(z.r * z.r) + (float)(z.i * z.i)) / 2.0;
+                nu = log(log_zn / log(2.0)) / log(2.0);
+                it_color = i + 1 - nu;
+                color1 = palette[(int)floor(it_color) % 16];
+                color2 = palette[((int)floor(it_color) + 1) % 16];
+                ((__global unsigned int *)output)[id] = c_interpol(color1, color2, it_color - floor(it_color));
+            }
+        }
 }

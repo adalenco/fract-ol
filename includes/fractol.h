@@ -54,6 +54,8 @@ typedef struct			s_ws
 	char				palette;
 	int					newton;
 	char				ncolor;
+	int					mult;
+	int					gpu;
 }						t_ws;
 
 int						ft_key_funct(int keycode, t_ws *prm);
@@ -69,5 +71,6 @@ void					zoom_it_keyfunct(int key, t_ws *prm);
 void					reset_quit_keyfunct(int key, t_ws *prm);
 void					swap_keyfunct(int key, t_ws *prm);
 void					options_key(int key, t_ws *prm);
+void					mult_keyfunct(int key, t_ws *prm);
 
 #endif

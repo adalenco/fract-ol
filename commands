@@ -1,0 +1,53 @@
+
+
+Bienvenue sur mon Fract'ol !
+
+Voici la liste des fractales disponibles, ainsi que les raccourcis a votre disposition.
+
+Fractales :
+
+    mandelbrot      julia
+
+    celtic          bship (burning ship)
+    
+    spaceship       tricorn
+    
+    mandeldrop      newton 
+    
+    multibrot       multicorn
+    
+    multidrop       multiship
+    
+    multijulia      multiceltic
+
+Commandes :
+
+Q, ESC : quitter le programme.
+
+Fleches directionnels : translations lentes.
+
+5, 1, 2, 3 du pav num : translations rapides.
+
+W, S : zoom avant, zoom arriere (zoom a la molette disponible).
+
+A, D : moins d'iterations, plus d'iterations.
+
+Z, C : encore moins d'iterations, encore plus d'iterations.
+
+P : reset la fractale actuelle.
+
+Espace : (julia et mandelbrot) activer / desactiver la modification a la souris.
+
+M : changer la palette de couleur.
+
+T : changer de fractale.
+
+N : (newton) changer de calcul.
+
+B : (newton) changer la methode de calcul des couleurs.
+
++, -, * du pav num : (multi fractales) augmenter la puissance, diminuer la puissance, reset la puissance.
+
+
+
+Amusez-vous bien, faites attention a vos yeux et a votre cerveau :)
