@@ -6,7 +6,7 @@
 /*   By: adalenco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 20:25:28 by adalenco          #+#    #+#             */
-/*   Updated: 2017/09/27 17:08:57 by adalenco         ###   ########.fr       */
+/*   Updated: 2017/09/27 18:43:34 by adalenco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ void			ft_mlx_set(t_ws *prm, int x, int y)
 void			commands(void)
 {
 	int			fd;
-	char		buf[1127];
+	char		buf[1132];
 
-	buf[1126] = 0;
+	buf[1131] = 0;
 	if ((fd = open("commands", O_RDONLY)) < 0)
 		ft_putstr("commands open error");
 	else
 	{
-		read(fd, buf, 1126);
+		read(fd, buf, 1131);
 		ft_putstr(buf);
 		close(fd);
 	}

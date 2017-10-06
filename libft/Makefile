@@ -6,7 +6,7 @@
 #    By: adalenco <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/27 21:24:43 by adalenco          #+#    #+#              #
-#    Updated: 2017/09/27 17:06:23 by adalenco         ###   ########.fr        #
+#    Updated: 2017/09/27 18:48:12 by adalenco         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,19 +89,19 @@ all: $(NAME)
 $(NAME): $(FCHO)
 		@ar rc $(NAME) $(FCHO)
 		@ranlib $(NAME)
-		@echo "\033[33;32mlibrary created"
+		@echo "\033[33;32mlibrary created\033[0m"
 
 $(FCHO):
 		@$(COMP) -c $(FCHC) -I $(INC)
-		@echo "\033[33;32mobjects created"
+		@echo "\033[33;32mobjects created\033[0m"
 
 clean:
 		@rm -rf $(FCHO)
-		@echo "\033[33;31m Files .o deleted"
+		@echo "\033[33;31m Files .o deleted\033[0m"
 
 fclean: clean
 		@rm -rf $(NAME)
-		@echo "\033[33;31m $(NAME) deleted"
+		@echo "\033[33;31m $(NAME) deleted\033[0m"
 
 re: fclean all
 
